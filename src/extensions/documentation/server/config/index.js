@@ -6,8 +6,8 @@ const defaultConfig = {
   ...defaultDocumentationConfig,
   session: {
     key: "plugin::documentation.sess",
-    maxAge: 86400000,
-    secretKeys: ["customDocSecret"],
+    maxAge: "session",
+    secretKeys: ["mySecret"],
   },
 };
 
