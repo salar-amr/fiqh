@@ -2,6 +2,7 @@ FROM strapi/base
 
 ENV HOST=0.0.0.0 \
     PORT=1337 \
+    NODE_ENV=production \
     ADMIN_JWT_SECRET=661ee08a3f332be6c13cb238011a4c12 \
     DATABASE_HOST=127.0.0.1 \
     DATABASE_PORT=3306 \
