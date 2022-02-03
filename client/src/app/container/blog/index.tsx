@@ -1,4 +1,5 @@
-import { Box } from "@mui/material"
+import { Box, useTheme } from "@mui/material"
+import { useBlogList } from "src/services/blog"
 import Archive from "./features/archive"
 import BestBlogs from "./features/bestBlogs"
 import BestBlogs2 from "./features/bestBlogs2"
@@ -15,10 +16,20 @@ import PopularBlogs from "./features/popularBlogs"
 import SelectedBlogs from "./features/selectedBlogs"
 
 const Blog = () => {
+  const theme = useTheme()
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <MainBlogs />
-      <Box sx={{ display: "flex", my: "40px" }}>
+      <Box
+        sx={{
+          display: "flex",
+          my: "40px",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column-reverse",
+          },
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -37,7 +48,15 @@ const Blog = () => {
         </Box>
       </Box>
       <PopularBlogs />
-      <Box sx={{ display: "flex" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column",
+          },
+        }}
+      >
         <Box
           sx={{
             minWidth: "410px",
@@ -56,10 +75,18 @@ const Blog = () => {
           <BlogTags />
           <DiscussBlogs />
         </Box>
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
           <BestBlogs />
           <BestBlogs2 />
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              [theme.breakpoints.down("md")]: {
+                flexDirection: "column",
+              },
+            }}
+          >
             <NewestBlogs2 />
             <SelectedBlogs />
           </Box>

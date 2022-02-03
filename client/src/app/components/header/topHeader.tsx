@@ -1,4 +1,4 @@
-import { Typography, Icon } from "@mui/material"
+import { Typography, Icon, useTheme } from "@mui/material"
 import { Box } from "@mui/system"
 import moment from "jalali-moment"
 import { useState } from "react"
@@ -21,6 +21,8 @@ const TopHeader = () => {
   const [activeLang, setActiveLang] = useState("فارسی")
   const langs = ["فارسی", "العریبه", "English"]
 
+  const theme = useTheme()
+
   return (
     <Box
       sx={{
@@ -31,13 +33,25 @@ const TopHeader = () => {
         justifyContent: "space-between",
         alignItems: "center",
         px: "80px",
+        [theme.breakpoints.down("md")]: {
+          px: "14px",
+        },
       }}
     >
       <Box sx={{ display: "flex", color: "#fff", alignItems: "center" }}>
         <Typography
           sx={{ marginRight: "8px", fontSize: "14px", color: "#FFF" }}
         >
-          <span> {ddd} </span>
+          <Box
+            component="span"
+            sx={{
+              [theme.breakpoints.down("md")]: {
+                display: "none",
+              },
+            }}
+          >
+            {ddd}
+          </Box>
           <span> {D} </span>
           <span> {MMMM} </span>
           <span> {YYYY} </span>
@@ -48,12 +62,15 @@ const TopHeader = () => {
           sx={{
             fontSize: "24px",
             opacity: "70%",
+            [theme.breakpoints.down("md")]: {
+              display: "none",
+            },
           }}
         />
         <Box
           sx={{
             paddingLeft: "18px",
-            marginLeft: "24px",
+            marginLeft: "18px",
             borderLeft: "1px solid #FFFFFF4D",
             display: "flex",
             alignItems: "center",
@@ -70,9 +87,30 @@ const TopHeader = () => {
         </Box>
       </Box>
       <Box
+        component="select"
+        sx={{
+          direction: "rtl",
+          bgcolor: "transparent",
+          border: "0",
+          color: "#FFF",
+          [theme.breakpoints.up("md")]: {
+            display: "none",
+            fontSize: "14px",
+            cursor: "pointer",
+          },
+        }}
+      >
+        {langs.map((lang) => (
+          <Box component="option">{lang}</Box>
+        ))}
+      </Box>
+      <Box
         sx={{
           display: "flex",
           flexDirection: "row-reverse",
+          [theme.breakpoints.down("md")]: {
+            display: "none",
+          },
         }}
       >
         {langs.map((lang) => (

@@ -1,10 +1,13 @@
-import { Box, Button } from "@mui/material"
+import { Box, Button, CircularProgress, useTheme } from "@mui/material"
 import { useEffect, useState } from "react"
 import BlogCard from "../blogCard"
 import BlogTitle from "../../../../components/blog/features/blogTitle"
-import lastBlogData from "./lastBlogsData.json"
+import { useBlogSort } from "src/services"
+import data from "./lastBlogsData.json"
 
 const LastBlogs = () => {
+  // const { data, isLoading } = useBlogSort("")
+
   const leftTitle = (
     <Button
       variant="contained"
@@ -14,17 +17,22 @@ const LastBlogs = () => {
       مشاهده همه
     </Button>
   )
-  const data = lastBlogData
-  const [headBlog, setHeadBlog] = useState<any>()
 
-  useEffect(() => {
-    setHeadBlog(data.shift())
-  }, [])
+  const theme = useTheme()
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column", my: "38px" }}>
       <BlogTitle text="آخرین مطالب" leftElement={leftTitle} />
-      <Box sx={{ display: "flex", justifyContent: "end" }}>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column-reverse",
+          },
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -34,11 +42,13 @@ const LastBlogs = () => {
             marginRight: "24px",
           }}
         >
-          {data.map((blog, i) => (
-            <BlogCard {...blog} key={i} variant="last" />
-          ))}
+          {data?.map((blog, i) => {
+            const d =
+              i === 0 ? <></> : <BlogCard {...blog} key={i} variant="last" />
+            return d
+          })}
         </Box>
-        <BlogCard {...headBlog} variant="head" style={{ flexGrow: 1 }} />
+        <BlogCard {...data[0]} variant="head" style={{ flexGrow: 1 }} />
       </Box>
     </Box>
   )

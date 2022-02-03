@@ -1,10 +1,15 @@
 import BlogTitle from "@/components/blog/features/blogTitle"
-import { Box, Divider, Icon } from "@mui/material"
+import { Box, CircularProgress, Divider, Icon, useTheme } from "@mui/material"
 import { ChevronLeftCircle, ChevronRightCircle } from "react-iconly"
+import { useBlogSort } from "src/services"
 import BlogCard from "../blogCard"
 import { newestData } from "./newestData"
 
 const NewestBlogs = () => {
+  // const { data, isLoading } = useBlogSort("")
+
+  const theme = useTheme()
+
   const leftTitle = (
     <>
       <Icon
@@ -29,6 +34,12 @@ const NewestBlogs = () => {
           display: "flex",
           flexDirection: "row-reverse",
           justifyContent: "end",
+          [theme.breakpoints.down("md")]: {
+            maxWidth: "100%",
+            flexWrap: "nowrap",
+            overflow: "scroll",
+            width: "100%",
+          },
         }}
       >
         {newestData.map((blog) => (

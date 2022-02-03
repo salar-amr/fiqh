@@ -1,38 +1,72 @@
 import { useState } from "react"
-import { Box, Button } from "@mui/material"
+import { Box, Button, CircularProgress, useTheme } from "@mui/material"
 import BlogTitle from "../../../../components/blog/features/blogTitle"
-import popularData from "./popularBlogsData.json"
+import data from "./popularBlogsData.json"
 import BlogCard from "../blogCard"
+import { useBlogSort } from "src/services/blog"
 
 const PopularBlogs = () => {
   const categories = ["همه", "امنیت", "تکنولوژی", "علوم", "سیاست"]
   const [activeCategory, setActiveCategory] = useState("همه")
 
+  // const { data, isLoading } = useBlogSort("totalRate%3Adesc")
+
+  // console.log("ttttttt", data)
+
+  const theme = useTheme()
+
   const leftTitle = (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row-reverse",
-      }}
-    >
-      {categories.map((cat) => (
-        <Button
-          color="white"
-          sx={{
-            color: activeCategory === cat ? "blue.main" : "gray.main",
-            borderRight: activeCategory === cat ? "2px solid #007BFF" : "0",
-            fontWeight: activeCategory === cat ? 800 : 400,
-            fontSize: "14px",
-            borderRadius: "0",
-            height: "24px",
-            px: "15px",
-          }}
-          onClick={() => setActiveCategory(cat)}
-        >
-          {cat}
-        </Button>
-      ))}
-    </Box>
+    <>
+      <Box
+        component="select"
+        sx={{
+          direction: "rtl",
+          bgcolor: "transparent",
+          border: "0",
+          color: "blue.main",
+          fontSize: "13px",
+          fontWeight: 800,
+          cursor: "pointer",
+          [theme.breakpoints.up("md")]: {
+            display: "none",
+          },
+        }}
+      >
+        {categories.map((cat, i) => (
+          <Box component="option" key={i}>
+            {cat}
+          </Box>
+        ))}
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row-reverse",
+          [theme.breakpoints.down("md")]: {
+            display: "none",
+          },
+        }}
+      >
+        {categories.map((cat, i) => (
+          <Button
+            color="white"
+            key={i}
+            sx={{
+              color: activeCategory === cat ? "blue.main" : "gray.main",
+              borderRight: activeCategory === cat ? "2px solid #007BFF" : "0",
+              fontWeight: activeCategory === cat ? 800 : 400,
+              fontSize: "14px",
+              borderRadius: "0",
+              height: "24px",
+              px: "15px",
+            }}
+            onClick={() => setActiveCategory(cat)}
+          >
+            {cat}
+          </Button>
+        ))}
+      </Box>
+    </>
   )
 
   return (
@@ -40,8 +74,20 @@ const PopularBlogs = () => {
       sx={{ display: "flex", flexDirection: "column", marginBottom: "46px" }}
     >
       <BlogTitle text="محبوب ترین ها" leftElement={leftTitle} />
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        {popularData.map((blog, i) => (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "row-reverse",
+            maxWidth: "100%",
+            flexWrap: "nowrap",
+            overflow: "scroll",
+            width: "100%",
+          },
+        }}
+      >
+        {data.map((blog, i) => (
           <BlogCard {...blog} key={i} variant="popular" />
         ))}
       </Box>

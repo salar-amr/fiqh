@@ -1,4 +1,4 @@
-import { Box, Icon, Typography } from "@mui/material"
+import { Box, Icon, Typography, useTheme } from "@mui/material"
 import { Chat } from "react-iconly"
 import Link from "next/link"
 
@@ -13,7 +13,8 @@ const BlogCard = ({
   variant,
   style,
   index,
-}: BlogCardType) => {
+}: FakeDataBlogType) => {
+  const theme = useTheme()
   return (
     <Link href="/blog/single/[blogId]" as="/blog/single/blog">
       <Box
@@ -49,12 +50,29 @@ const BlogCard = ({
             variant === "footer" ||
             variant === "archive"
               ? "16px"
-              : "unset",
+              : null,
 
           "&:last-child": {
             borderBottom: variant === "archive" ? "1px solid #D0D2D4" : "0",
           },
           ...style,
+          [theme.breakpoints.down("md")]: {
+            marginBottom:
+              variant === "head" || variant === "archive" ? "26px" : null,
+            minWidth:
+              variant === "newest"
+                ? "296px"
+                : variant === "popular"
+                ? "237px"
+                : null,
+            marginLeft:
+              variant === "newest" || variant === "popular" ? "32px" : null,
+            flexDirection: variant === "archive" ? "column" : null,
+            borderBottom: variant === "archive" ? "0" : null,
+            "&:last-child": {
+              borderBottom: "0",
+            },
+          },
         }}
       >
         <Box
@@ -96,6 +114,9 @@ const BlogCard = ({
             alignItems: "end",
             color: "#FFF",
             marginLeft: variant == "newest" || variant == "head" ? "0" : "15px",
+            [theme.breakpoints.down("md")]: {
+              marginLeft: variant == "popular" ? "0" : null,
+            },
           }}
         >
           {variant == "head" ||
@@ -110,6 +131,7 @@ const BlogCard = ({
                 borderRadius: "24px",
                 p: "4px 8px",
                 m: "0 16px 16px 0",
+                color: "#FFF",
               }}
             >
               {tag}
@@ -150,7 +172,7 @@ const BlogCard = ({
                 variant === "archive"
                   ? "16px"
                   : "8px",
-              color: variant === "footer" ? "#8A8E93" : "unset",
+              color: variant === "footer" ? "#8A8E93" : null,
             }}
           >
             <Typography
@@ -192,7 +214,7 @@ const BlogCard = ({
                     fontSize: "14px",
                   }}
                 >
-                  ({comments?.length})
+                  ({comments.length})
                 </Typography>
                 <Icon
                   component={Chat}
@@ -208,7 +230,7 @@ const BlogCard = ({
               textAlign: "right",
               fontWeight: 800,
               marginBottom: "16px",
-              fontSize: variant == "mostVisited" ? "14px" : "unset",
+              fontSize: variant == "mostVisited" ? "14px" : null,
               maxHeight: "46px",
               overflow: "hidden",
               color: variant === "footer" ? "#FFF" : "gray.dark",

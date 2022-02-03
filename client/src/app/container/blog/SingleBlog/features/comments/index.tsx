@@ -1,4 +1,6 @@
 import { Box, TextField, Typography, Button } from "@mui/material"
+import Comment from "./commentCard"
+import NewComment from "./newComment"
 
 const Comments = () => {
   return (
@@ -10,12 +12,28 @@ const Comments = () => {
           width: "100%",
         }}
       >
-        <TextField
+        {/* <TextField
           select
           sx={{ width: "193px", color: "#FFF" }}
           placeholder="مرتب سازی بر اساس"
           defaultValue="مرتب سازی بر اساس"
-        />
+        /> */}
+        <Box
+          component="select"
+          sx={{
+            width: "193px",
+            color: "#FFF",
+            borderRadius: "24px",
+            outline: 0,
+            border: "0",
+            bgcolor: "#151D26",
+            placeholder: "fasdfasfa",
+            direction: "rtl",
+            p: "8px 24px",
+          }}
+        >
+          <option value="volvo">مرتب سازی بر اساس</option>
+        </Box>
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Typography>4 دیدگاه</Typography>
           <Typography
@@ -31,6 +49,8 @@ const Comments = () => {
           </Typography>
         </Box>
       </Box>
+      <NewComment />
+      <Comment />
     </Box>
   )
 }

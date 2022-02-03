@@ -6,15 +6,7 @@ import video from "./dailyVideoData.json"
 
 const DailyVideo = () => {
   const data = video
-  const {
-    imgUrl,
-    tag,
-    author,
-    time,
-    comments,
-    title,
-    description,
-  }: BlogCardType = data
+  const { imgUrl, tag, author, time, comments, title, description }: any = data
   const theme = useTheme()
   return (
     <Box
@@ -45,11 +37,20 @@ const DailyVideo = () => {
             maxWidth: "343px",
             width: "100%",
             height: "198px",
+            alignSelf: "center",
           },
         }}
       >
         <Box
-          sx={{ display: "flex", flexDirection: "column", alignItems: "end" }}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "end",
+            [theme.breakpoints.down("md")]: {
+              justifyContent: "space-between",
+              height: "100%",
+            },
+          }}
         >
           <Typography
             sx={{
@@ -59,6 +60,7 @@ const DailyVideo = () => {
               borderRadius: "24px",
               p: "4px 8px",
               marginBottom: "10px",
+              color: "#FFF",
             }}
           >
             {tag}
@@ -68,6 +70,9 @@ const DailyVideo = () => {
               display: "flex",
               flexDirection: "row-reverse",
               marginBottom: "4px",
+              [theme.breakpoints.down("md")]: {
+                display: "none",
+              },
             }}
           >
             <Typography
@@ -109,6 +114,17 @@ const DailyVideo = () => {
               />
             </Box>
           </Box>
+          <Box
+            component="img"
+            src="/assets/images/play.png"
+            sx={{
+              width: "54px",
+              marginLeft: "24px",
+              [theme.breakpoints.up("md")]: {
+                display: "none",
+              },
+            }}
+          />
           <Typography
             sx={{
               textAlign: "right",
@@ -122,7 +138,13 @@ const DailyVideo = () => {
         <Box
           component="img"
           src="/assets/images/play.png"
-          sx={{ width: "54px", marginLeft: "24px" }}
+          sx={{
+            width: "54px",
+            marginLeft: "24px",
+            [theme.breakpoints.down("md")]: {
+              display: "none",
+            },
+          }}
         />
       </Box>
     </Box>

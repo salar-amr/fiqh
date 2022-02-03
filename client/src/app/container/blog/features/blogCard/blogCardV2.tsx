@@ -2,13 +2,16 @@ import { Box, Icon, Typography } from "@mui/material"
 import { Chat } from "react-iconly"
 
 const BlogCardV2 = ({
+  imgUrl,
   tag,
-  title,
   author,
-  comments,
   time,
+  comments,
+  title,
+  description,
   variant,
-}: BlogCardV2Type) => {
+  style,
+}: FakeDataBlogType) => {
   return (
     <Box
       sx={{
@@ -24,6 +27,7 @@ const BlogCardV2 = ({
         "&:first-child": {
           paddingTop: "0",
         },
+        ...style,
       }}
     >
       <Typography
@@ -87,7 +91,7 @@ const BlogCardV2 = ({
               fontSize: "14px",
             }}
           >
-            ({comments?.length})
+            ({comments.length})
           </Typography>
           <Icon
             component={Chat}

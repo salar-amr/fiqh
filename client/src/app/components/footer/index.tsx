@@ -1,4 +1,5 @@
 import { Box, Typography, TextField, Button } from "@mui/material"
+import { useTheme } from "@mui/system"
 import BlogTitle from "../blog/features/blogTitle"
 import FooterBlogs from "./features/footerBlogs"
 import FooterBlogsV2 from "./features/footerBlogs/footerBlogsV2"
@@ -14,6 +15,8 @@ const symbols = (
 )
 
 const Footer = () => {
+  const theme = useTheme()
+
   return (
     <Box
       sx={{
@@ -21,6 +24,10 @@ const Footer = () => {
         flexDirection: "column",
         bgcolor: "#130F26",
         p: "64px 80px 30px 80px",
+        [theme.breakpoints.down("md")]: {
+          p: "15px",
+          paddingBottom: "24px",
+        },
       }}
     >
       <Box
@@ -29,6 +36,9 @@ const Footer = () => {
           justifyContent: "space-between",
           borderBottom: "1px solid #2C343C",
           paddingBottom: "44px",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column-reverse",
+          },
         }}
       >
         <FooterBlogsV2 title="پر بحث ترین ها" />
@@ -41,6 +51,10 @@ const Footer = () => {
           justifyContent: "space-between",
           borderBottom: "1px solid #2C343C",
           paddingBottom: "44px",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column-reverse",
+            alignItems: "center",
+          },
         }}
       >
         <FooterLinks title="مسابقه" links={mLinks} />
@@ -55,6 +69,9 @@ const Footer = () => {
           borderBottom: "1px solid #2C343C",
           paddingBottom: "44px",
           marginTop: "48px",
+          [theme.breakpoints.down("md")]: {
+            flexDirection: "column",
+          },
         }}
       >
         <Box
@@ -64,6 +81,11 @@ const Footer = () => {
             alignItems: "end",
             maxWidth: "515px",
             width: "100%",
+            [theme.breakpoints.down("md")]: {
+              borderBottom: "1px solid #2C343C",
+              paddingBottom: "24px",
+              marginBottom: "24px",
+            },
           }}
         >
           <Typography
@@ -83,7 +105,7 @@ const Footer = () => {
             sx={{
               position: "relative",
               width: "100%",
-              height: "64px",
+
               m: "25px 0 38px 0",
             }}
           >
@@ -91,7 +113,7 @@ const Footer = () => {
               component="input"
               sx={{
                 width: "100%",
-                height: "100%",
+                height: "64px",
                 bgcolor: "#444A514D",
                 borderRadius: "50px",
                 outline: "0",
@@ -112,6 +134,15 @@ const Footer = () => {
                 width: "118px",
                 height: "48px",
                 color: "#FFF",
+                [theme.breakpoints.down("md")]: {
+                  position: "initial",
+                  left: "0",
+                  top: "0",
+                  width: "100%",
+                  height: "64px",
+                  borderRadius: "50px",
+                  marginTop: "8px",
+                },
               }}
               variant="contained"
               color="lime"
@@ -196,7 +227,16 @@ const Footer = () => {
             justifyContent: "space-between",
           }}
         >
-          <Box sx={{ display: "flex", marginBottom: "27px" }}>
+          <Box
+            sx={{
+              display: "flex",
+              marginBottom: "27px",
+              [theme.breakpoints.down("md")]: {
+                flexDirection: "column-reverse",
+                alignItems: "end",
+              },
+            }}
+          >
             <Box
               sx={{
                 display: "flex",
@@ -217,14 +257,51 @@ const Footer = () => {
             <Box
               component="img"
               src="/assets/images/fegh.png"
-              sx={{ width: "118px", height: "118px", marginLeft: "70px" }}
+              sx={{
+                width: "118px",
+                height: "118px",
+                marginLeft: "70px",
+                [theme.breakpoints.down("md")]: {
+                  marginBottom: "19px",
+                },
+              }}
             />
           </Box>
-          <BlogTitle
-            text="مجوزها و نمادها"
-            leftElement={symbols}
-            variant="footer"
-          />
+          <Box
+            sx={{
+              [theme.breakpoints.down("md")]: {
+                display: "none",
+              },
+            }}
+          >
+            <BlogTitle
+              text="مجوزها و نمادها"
+              leftElement={symbols}
+              variant="footer"
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "end",
+              [theme.breakpoints.up("md")]: {
+                display: "none",
+              },
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "20px",
+                fontWeight: 800,
+                color: "#F5F5F5",
+                marginBottom: "18px",
+              }}
+            >
+              مجوزها و نمادها
+            </Typography>
+            {symbols}
+          </Box>
         </Box>
       </Box>
       <Typography

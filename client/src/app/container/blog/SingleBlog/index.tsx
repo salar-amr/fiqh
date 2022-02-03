@@ -4,6 +4,9 @@ import MainBlog from "../features/mainBlogs/mainBlog"
 import headData from "../blogCategory/catBlogData.json"
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined"
 import Comments from "./features/comments"
+import MostVisitedBlogs from "../features/mostVisitedBlogs"
+import DailyVideo from "../features/dailyVideo"
+import MostVisitedBlogs2 from "../features/mostVisitedBlogs2"
 const SingleBlog = () => {
   const items = [
     "پردازنده 6 هسته ای",
@@ -24,9 +27,14 @@ const SingleBlog = () => {
           display: "flex",
           flexDirection: "column",
           flexGrow: 1,
+          marginRight: "35px",
         }}
       >
-        eee
+        <MostVisitedBlogs />
+        <DailyVideo />
+        <Box sx={{ marginTop: "40px" }}>
+          <MostVisitedBlogs2 />
+        </Box>
       </Box>
       <Box
         sx={{

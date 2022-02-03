@@ -1,20 +1,28 @@
-import { Box, Button, Typography } from "@mui/material"
+import { Box, Button, Typography, useTheme } from "@mui/material"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import ReactCodeInput from "react-code-input"
+import { useConfirm } from "src/services/auth"
+import Cookies from "js-cookie"
+import Snackbar from "@/components/Snackbar"
 
 const ConfirmLogin = () => {
   const router = useRouter()
 
   const [confirmCode, setConfirmCode] = useState("")
 
+  const { mutate } = useConfirm()
+
   const initialMinute = 2
-  const initialSeconds = 15
+  const initialSeconds = 0
 
   const [minutes, setMinutes] = useState(initialMinute)
   const [seconds, setSeconds] = useState(initialSeconds)
 
   const [disableButton, setDsableButton] = useState(true)
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+
+  const text = Cookies.get("phone") ? "شماره همراه" : "ایمیل"
 
   useEffect(() => {
     let myInterval = setInterval(() => {
@@ -35,6 +43,26 @@ const ConfirmLogin = () => {
       clearInterval(myInterval)
     }
   })
+
+  const confirmHandler = (e: any) => {
+    e.preventDefault()
+    router.push("/")
+    // mutate(
+    //   {
+    //     confirm: confirmCode,
+    //   },
+    //   {
+    //     onSuccess: (res: any) => {
+    //       Cookies.set("token", res?.jwt)
+    //     },
+    //     onError: () => {
+    //       setOpenSnackbar(true)
+    //     },
+    //   }
+    // )
+  }
+
+  const theme = useTheme()
 
   return (
     <Box
@@ -60,7 +88,13 @@ const ConfirmLogin = () => {
           bgcolor: "#fff",
           borderRadius: "12px",
           boxShadow: "0px 14px 24px -5px #AAAAAF26",
+          [theme.breakpoints.down("md")]: {
+            px: "20px",
+            mx: "5px",
+          },
         }}
+        component="form"
+        onSubmit={confirmHandler}
       >
         <Typography
           sx={{
@@ -78,9 +112,15 @@ const ConfirmLogin = () => {
             textAlign: "center",
             px: "43px",
             fontWeight: "bold",
+            [theme.breakpoints.down("md")]: {
+              px: "0",
+            },
           }}
         >
-          یک کد 5 رقمی به شماره همراه{" "}
+          یک کد 5 رقمی به{" "}
+          <Box component="span" sx={{}}>
+            {text}&nbsp;
+          </Box>
           <Box
             component="span"
             sx={{
@@ -89,7 +129,9 @@ const ConfirmLogin = () => {
               marginLeft: "5px",
             }}
           >
-            09123452211
+            {Cookies.get("phone")
+              ? Cookies.get("phone") + "+"
+              : Cookies.get("email")}
           </Box>
           ارسال شده است
         </Typography>
@@ -125,7 +167,7 @@ const ConfirmLogin = () => {
             marginBottom: "24px",
             marginTop: "16px",
           }}
-          onClick={() => router.push("/")}
+          type="submit"
         >
           تایید شماره همراه
         </Button>
@@ -137,7 +179,6 @@ const ConfirmLogin = () => {
             fontWeight: 500,
           }}
         >
-          <Box> تا ارسال مجدد کد </Box>
           <Box sx={{ display: "flex", width: "40px" }}>
             <Box
               sx={{
@@ -149,8 +190,15 @@ const ConfirmLogin = () => {
               {minutes}:{seconds}
             </Box>
           </Box>
+          <Box> تا ارسال مجدد کد </Box>
         </Typography>
       </Box>
+      <Snackbar
+        handleClose={() => setOpenSnackbar(false)}
+        open={openSnackbar}
+        message="خطا"
+        variant="error"
+      />
     </Box>
   )
 }

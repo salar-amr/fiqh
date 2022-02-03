@@ -3,12 +3,14 @@ import { createTheme } from "@mui/material"
 declare module "@mui/material/styles" {
   interface Palette {
     gray: Palette["primary"]
+    red: Palette["primary"]
     lime: Palette["primary"]
     white: Palette["primary"]
     blue: Palette["primary"]
   }
   interface PaletteOptions {
     gray: PaletteOptions["primary"]
+    red: PaletteOptions["primary"]
     lime: PaletteOptions["primary"]
     white: PaletteOptions["primary"]
     blue: PaletteOptions["primary"]
@@ -35,6 +37,7 @@ declare module "@mui/material/styles" {
 declare module "@mui/material/Button" {
   interface ButtonPropsColorOverrides {
     gray: true
+    red: true
     lime: true
     white: true
     blue: true
@@ -43,6 +46,15 @@ declare module "@mui/material/Button" {
 declare module "@mui/material/TextField" {
   interface TextFieldPropsColorOverrides {
     gray: true
+    red: true
+    lime: true
+    white: true
+  }
+}
+declare module "@mui/material/IconButton" {
+  interface IconButtonPropsColorOverrides {
+    gray: true
+    red: true
     lime: true
     white: true
   }
@@ -71,6 +83,9 @@ const theme = createTheme({
       main: "#FFF",
       light: "#FFF",
       dark: "#F5F5F5",
+    },
+    red: {
+      main: "#CB0036",
     },
   },
   typography: {

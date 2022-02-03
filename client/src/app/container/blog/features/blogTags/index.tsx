@@ -1,8 +1,10 @@
 import BlogTitle from "@/components/blog/features/blogTitle"
-import { Box, Typography, useTheme } from "@mui/material"
+import { Box, CircularProgress, Typography, useTheme } from "@mui/material"
 import data from "./tagData.json"
+// import { useCategoryList } from "src/services"
 
-const Tag = ({ imgUrl, name }: TagType) => {
+// const Tag = ({ id, attributes }: TagType) => {
+const Tag = ({ name, imgUrl }: any) => {
   const theme = useTheme()
   return (
     <Box
@@ -21,12 +23,15 @@ const Tag = ({ imgUrl, name }: TagType) => {
         marginBottom: "16px",
       }}
     >
-      <Typography sx={{ fontWeight: "bold" }}>{name}#</Typography>
+      <Typography sx={{ fontWeight: "bold", color: "#FFF" }}>
+        {name}#
+      </Typography>
     </Box>
   )
 }
 
 const BlogTags = () => {
+  // const { data, isLoading } = useCategoryList()
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginTop: "35px" }}>
       <BlogTitle text="موضوعات" />
@@ -37,8 +42,8 @@ const BlogTags = () => {
           justifyContent: "space-between",
         }}
       >
-        {data.map((tag) => (
-          <Tag {...tag} />
+        {data?.map((tag, i) => (
+          <Tag {...tag} key={i} />
         ))}
       </Box>
     </Box>

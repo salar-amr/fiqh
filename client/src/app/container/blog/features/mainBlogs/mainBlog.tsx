@@ -12,7 +12,7 @@ const MainBlog = ({
   description,
   variant,
   style,
-}: BlogCardType) => {
+}: FakeDataBlogType) => {
   const theme = useTheme()
   return (
     <Box
@@ -32,9 +32,10 @@ const MainBlog = ({
         p: variant === "xl" ? "32px" : "25px",
         flexGrow: 1,
         [theme.breakpoints.down("md")]: {
-          maxWidth: "343px",
+          // maxWidth: "343px",
           width: "100%",
           height: "237px",
+          alignSelf: "center",
         },
         ...style,
       }}
