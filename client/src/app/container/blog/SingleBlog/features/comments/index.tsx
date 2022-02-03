@@ -1,8 +1,44 @@
 import { Box, TextField, Typography, Button } from "@mui/material"
+import { useEffect, useState } from "react"
 import Comment from "./commentCard"
 import NewComment from "./newComment"
+// @ts-ignore
+import qs from "qs"
+import { useRouter } from "next/router"
 
 const Comments = () => {
+  const {
+    query: { blogId },
+  } = useRouter()
+
+  const [coms, setComs] = useState([])
+
+  const qry = qs.stringify({
+    filters: {
+      blog: {
+        id: {
+          $eq: blogId,
+        },
+      },
+    },
+    populate: ["blog_comments", "user.image"],
+  })
+
+  useEffect(() => {
+    async function getComments() {
+      const dt = await fetch(
+        "https://fm3.berentco.ir/api/blog-comments" + `?${qry}`
+      )
+      const jdt = await dt.json()
+
+      if (jdt.data) {
+        setComs(jdt.data)
+      }
+    }
+
+    getComments()
+  }, [qry])
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
       <Box
@@ -50,7 +86,10 @@ const Comments = () => {
         </Box>
       </Box>
       <NewComment />
-      <Comment />
+      {coms.map((itm) => {
+        return <Comment {...itm} />
+      })}
+      {/* <Comment /> */}
     </Box>
   )
 }

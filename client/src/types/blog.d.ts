@@ -20,6 +20,8 @@ declare global {
     locale: string
     image: ImageType
     author: AuthorType
+    blog_tags: BlogTagType
+    blog_categories: BlogTagType
   }
 
   type ImageType = {
@@ -38,6 +40,15 @@ declare global {
         fullName: string
       }
     }
+  }
+
+  type BlogTagType = {
+    data: {
+      id: string | number
+      attributes: {
+        title: string
+      }
+    }[]
   }
 
   type BlogCardType = {

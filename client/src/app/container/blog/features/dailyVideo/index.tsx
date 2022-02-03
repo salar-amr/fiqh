@@ -1,12 +1,54 @@
 import BlogTitle from "@/components/blog/features/blogTitle"
 import { useTheme } from "@mui/material"
 import { Box, Icon, Typography } from "@mui/material"
+import { useEffect, useState } from "react"
 import { Chat, Play } from "react-iconly"
+import { useBlogVideo } from "src/services"
 import video from "./dailyVideoData.json"
 
 const DailyVideo = () => {
-  const data = video
-  const { imgUrl, tag, author, time, comments, title, description }: any = data
+  const { data } = useBlogVideo()
+  console.log("vid", data)
+  // const data = video
+  // const { imgUrl, tag, author, time, comments, title, description }: any = data
+  const date = new Date(data?.data?.attributes?.publishedAt)
+  const [time, setTime] = useState("")
+
+  useEffect(() => {
+    let current = Date.now()
+    let msPerMinute = 60 * 1000
+    let msPerHour = msPerMinute * 60
+    let msPerDay = msPerHour * 24
+    let msPerMonth = msPerDay * 30
+    let msPerYear = msPerDay * 365
+
+    let elapsed = current - date.getTime()
+
+    if (elapsed < msPerMinute) {
+      if (elapsed / 1000 < 30) {
+        return "به تازگی"
+        setTime("به تازگی")
+      }
+      setTime(Math.round(elapsed / 1000) + " ثانیه پیش")
+      // return Math.round(elapsed / 1000) + " ثانیه پیش"
+    } else if (elapsed < msPerHour) {
+      setTime(Math.round(elapsed / msPerMinute) + " دقیقه پیش")
+      // return Math.round(elapsed / msPerMinute) + " دقیقه پیش"
+    } else if (elapsed < msPerDay) {
+      setTime(Math.round(elapsed / msPerHour) + " ساعت پیش")
+      // return Math.round(elapsed / msPerHour) + " ساعت پیش"
+    } else if (elapsed < msPerMonth) {
+      setTime(Math.round(elapsed / msPerDay) + " روز پیش")
+      // return Math.round(elapsed / msPerDay) + " روز پیش"
+    } else if (elapsed < msPerYear) {
+      setTime(Math.round(elapsed / msPerMonth) + " ماه پیش")
+      // return Math.round(elapsed / msPerMonth) + " ماه پیش"
+    } else {
+      setTime(Math.round(elapsed / msPerYear) + " سال پیش")
+      // return Math.round(elapsed / msPerYear) + " سال پیش"
+    }
+  }, [date])
+
   const theme = useTheme()
   return (
     <Box
@@ -21,7 +63,7 @@ const DailyVideo = () => {
       <Box
         sx={{
           display: "flex",
-          background: `linear-gradient(359.76deg, #130F26 0.23%, rgba(19, 15, 38, 0) 115.53%),url(${imgUrl}) center no-repeat`,
+          background: `linear-gradient(359.76deg, #130F26 0.23%, rgba(19, 15, 38, 0) 115.53%),url(${data?.data?.attributes?.image?.data?.attributes?.url}) center no-repeat`,
           backgroundSize: "cover",
           height: "240px",
           width: "100%",
@@ -63,7 +105,9 @@ const DailyVideo = () => {
               color: "#FFF",
             }}
           >
-            {tag}
+            {data?.data?.attributes?.blog_tags?.data?.length > 0
+              ? data?.data?.attributes?.blog_tags?.data[0]?.attributes?.title
+              : "tag"}
           </Typography>
           <Box
             sx={{
@@ -84,7 +128,9 @@ const DailyVideo = () => {
                 fontWeight: 700,
               }}
             >
-              {author}
+              {data?.data?.attributes?.blog_tags?.data?.length > 0
+                ? data?.data?.attributes?.blog_tags?.data[0]?.attributes?.title
+                : "tag"}
             </Typography>
             <Typography
               sx={{
@@ -104,7 +150,7 @@ const DailyVideo = () => {
                   fontSize: "14px",
                 }}
               >
-                ({comments.length})
+                ({data?.data?.attributes?.commentCount})
               </Typography>
               <Icon
                 component={Chat}
@@ -132,7 +178,7 @@ const DailyVideo = () => {
               color: "#FFF",
             }}
           >
-            {title}
+            {data?.data?.attributes?.title}
           </Typography>
         </Box>
         <Box

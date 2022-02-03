@@ -3,10 +3,10 @@ import { useEffect, useState } from "react"
 import BlogCard from "../blogCard"
 import BlogTitle from "../../../../components/blog/features/blogTitle"
 import { useBlogSort } from "src/services"
-import data from "./lastBlogsData.json"
+// import data from "./lastBlogsData.json"
 
 const LastBlogs = () => {
-  // const { data, isLoading } = useBlogSort("")
+  const { data, isLoading } = useBlogSort("publishedAt%3Adesc")
 
   const leftTitle = (
     <Button
@@ -42,13 +42,17 @@ const LastBlogs = () => {
             marginRight: "24px",
           }}
         >
-          {data?.map((blog, i) => {
+          {data?.data?.map((blog, i) => {
             const d =
-              i === 0 ? <></> : <BlogCard {...blog} key={i} variant="last" />
+              i === 0 || i > 4 ? (
+                <></>
+              ) : (
+                <BlogCard {...blog} key={i} variant="last" />
+              )
             return d
           })}
         </Box>
-        <BlogCard {...data[0]} variant="head" style={{ flexGrow: 1 }} />
+        <BlogCard {...data?.data[0]} variant="head" style={{ flexGrow: 1 }} />
       </Box>
     </Box>
   )

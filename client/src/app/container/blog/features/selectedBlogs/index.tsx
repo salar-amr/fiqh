@@ -1,13 +1,13 @@
 import BlogTitle from "@/components/blog/features/blogTitle"
 import { Box, CircularProgress } from "@mui/material"
-import { useBlogSort } from "src/services"
+import { useBlogSelected } from "src/services"
 import BlogCard from "../blogCard"
-import data from "./selectedData.json"
+// import data from "./selectedData.json"
 
 const SelectedBlogs = () => {
   // const headBlog = data[0]
 
-  // const { data, isLoading } = useBlogSort("")
+  const { data, isLoading } = useBlogSelected()
 
   return (
     <Box
@@ -16,18 +16,19 @@ const SelectedBlogs = () => {
         flexDirection: "column",
         marginTop: "53px",
         marginLeft: "10px",
+        flexGrow: 1,
       }}
     >
       <BlogTitle text="منتخبین سردبیر" />
       <Box sx={{ display: "flex", flexDirection: "column", alignItems: "end" }}>
         <BlogCard
-          {...data[0]}
+          {...data?.data[0]}
           variant="head"
           style={{ marginBottom: "32px" }}
         />
-        {data?.map((blog, i) => {
+        {data?.data?.map((blog, i) => {
           const b =
-            i == 0 || i > 4 ? (
+            i == 0 || i > 3 ? (
               <></>
             ) : (
               <BlogCard {...blog} variant="discuss" key={i} />

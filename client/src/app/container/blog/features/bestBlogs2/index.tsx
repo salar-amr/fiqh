@@ -3,10 +3,10 @@ import { Box, Button, useTheme } from "@mui/material"
 import { useBlogSort } from "src/services/blog"
 import BlogCard from "../blogCard"
 import MainBlog from "../mainBlogs/mainBlog"
-import data from "./best2Data.json"
+// import data from "./best2Data.json"
 
 const BestBlogs2 = () => {
-  // const { data, isLoading } = useBlogSort("")
+  const { data, isLoading } = useBlogSort("totalRate%3Adesc")
   const leftTitle = (
     <Button
       variant="contained"
@@ -24,7 +24,11 @@ const BestBlogs2 = () => {
       <BlogTitle text="برترین ها" leftElement={leftTitle} />
 
       <>
-        <MainBlog {...data[0]} variant="xl" style={{ marginBottom: "24px" }} />
+        <MainBlog
+          {...data?.data[0]}
+          variant="xl"
+          style={{ marginBottom: "24px" }}
+        />
         <Box
           sx={{
             display: "flex",
@@ -39,7 +43,7 @@ const BestBlogs2 = () => {
             },
           }}
         >
-          {data?.map((blog, i) => {
+          {data?.data?.map((blog, i) => {
             const b =
               i == 0 || i > 3 ? (
                 <></>

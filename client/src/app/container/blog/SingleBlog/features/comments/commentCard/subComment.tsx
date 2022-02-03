@@ -2,13 +2,41 @@ import { Box, IconButton, Typography } from "@mui/material"
 import { Like1, Dislike } from "iconsax-react"
 import { useState } from "react"
 
+function timeDifference(current: any, previous: any) {
+  var msPerMinute = 60 * 1000
+  var msPerHour = msPerMinute * 60
+  var msPerDay = msPerHour * 24
+  var msPerMonth = msPerDay * 30
+  var msPerYear = msPerDay * 365
+
+  var elapsed = current - previous
+
+  if (elapsed < msPerMinute) {
+    if (elapsed / 1000 < 30) return "به تازگی"
+
+    return Math.round(elapsed / 1000) + " ثانیه پیش"
+  } else if (elapsed < msPerHour) {
+    return Math.round(elapsed / msPerMinute) + " دقیقه پیش"
+  } else if (elapsed < msPerDay) {
+    return Math.round(elapsed / msPerHour) + " ساعت پیش"
+  } else if (elapsed < msPerMonth) {
+    return Math.round(elapsed / msPerDay) + " روز پیش"
+  } else if (elapsed < msPerYear) {
+    return Math.round(elapsed / msPerMonth) + " ماه پیش"
+  } else {
+    return Math.round(elapsed / msPerYear) + " سال پیش"
+  }
+}
+
 const divider = (
   <Box
     sx={{ borderRight: "1px solid #5B616780", height: "16px", mx: "16px" }}
   />
 )
 
-const SubComment = () => {
+const SubComment = (props: any) => {
+  console.log(props)
+
   const [vote, setVote] = useState("null")
 
   const likeHandler = () => {
@@ -48,11 +76,12 @@ const SubComment = () => {
           }}
         />
         <Typography sx={{ color: "gray.dark", fontWeight: 800 }}>
-          علی علیزاده
+          {props.attributes?.user.data?.attributes.username ||
+            props.attributes?.user.data?.attributes.username}
         </Typography>
         {divider}
         <Typography sx={{ color: "#444A51", fontSize: "14px" }}>
-          2 ساعت پیش
+          {timeDifference(new Date(), new Date(props.attributes.createdAt))}
         </Typography>
         {divider}
         {/* like/dislike */}
@@ -96,9 +125,7 @@ const SubComment = () => {
         </Box>
       </Box>
       <Typography sx={{ marginTop: "16px" }}>
-        سامسونگ به عنوان یکی از تامین‌کنندگان صفحات نمایش اپل در مراحل ابتدایی
-        آماده‌سازی خط تولید نمایشگر OLED قرار دارد که در مدل‌های آتی مک‌بوک پرو
-        به کار گرفته خواهد شد
+        {props.attributes.content}
       </Typography>
     </Box>
   )

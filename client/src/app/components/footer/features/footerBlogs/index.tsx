@@ -1,8 +1,10 @@
 import { Box, Typography } from "@mui/material"
 import BlogCard from "src/app/container/blog/features/blogCard"
-import data from "./footerBlogsData.json"
+import { useBlogSort } from "src/services"
+// import data from "./footerBlogsData.json"
 
 const FooterBlogs = ({ title }: any) => {
+  const { data, isLoading } = useBlogSort("publishedAt%3Adesc")
   return (
     <Box
       sx={{
@@ -23,10 +25,12 @@ const FooterBlogs = ({ title }: any) => {
       >
         {title}
       </Typography>
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
-        {data.map((blog, i) => (
-          <BlogCard {...blog} variant="footer" key={i} />
-        ))}
+      <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+        {data?.data?.map((blog, i) => {
+          const d =
+            i > 2 ? <></> : <BlogCard {...blog} variant="footer" key={i} />
+          return d
+        })}
       </Box>
     </Box>
   )

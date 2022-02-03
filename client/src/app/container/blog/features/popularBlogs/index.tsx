@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Box, Button, CircularProgress, useTheme } from "@mui/material"
 import BlogTitle from "../../../../components/blog/features/blogTitle"
-import data from "./popularBlogsData.json"
+// import data from "./popularBlogsData.json"
 import BlogCard from "../blogCard"
 import { useBlogSort } from "src/services/blog"
 
@@ -9,9 +9,9 @@ const PopularBlogs = () => {
   const categories = ["همه", "امنیت", "تکنولوژی", "علوم", "سیاست"]
   const [activeCategory, setActiveCategory] = useState("همه")
 
-  // const { data, isLoading } = useBlogSort("totalRate%3Adesc")
+  const { data, isLoading } = useBlogSort("totalRate%3Adesc")
 
-  // console.log("ttttttt", data)
+  console.log("ttttttt", data)
 
   const theme = useTheme()
 
@@ -87,9 +87,11 @@ const PopularBlogs = () => {
           },
         }}
       >
-        {data.map((blog, i) => (
-          <BlogCard {...blog} key={i} variant="popular" />
-        ))}
+        {data?.data?.map((blog, i) => {
+          const d =
+            i > 4 ? <></> : <BlogCard {...blog} key={i} variant="popular" />
+          return d
+        })}
       </Box>
     </Box>
   )

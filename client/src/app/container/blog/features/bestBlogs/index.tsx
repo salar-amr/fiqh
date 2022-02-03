@@ -2,10 +2,10 @@ import { Box, Button, CircularProgress } from "@mui/material"
 import BlogCard from "../blogCard"
 import BlogTitle from "../../../../components/blog/features/blogTitle"
 import { useBlogSort } from "src/services/blog"
-import data from "./bestData.json"
+// import data from "./bestData.json"
 
 const BestBlogs = () => {
-  // const { data, isLoading } = useBlogSort("")
+  const { data, isLoading } = useBlogSort("totalRate%3Adesc")
 
   const leftTitle = (
     <Button
@@ -27,7 +27,7 @@ const BestBlogs = () => {
 
       <>
         <BlogCard
-          {...data[0]}
+          {...data?.data[0]}
           variant="best-head"
           style={{ marginBottom: "16px" }}
         />
@@ -35,15 +35,21 @@ const BestBlogs = () => {
           sx={{
             display: "flex",
             flexWrap: "wrap",
-            justifyContent: "space-between",
+            justifyContent: "end",
           }}
         >
-          {data?.map((blog, i) => {
+          {data?.data?.map((blog, i) => {
             const b =
               i == 0 || i > 4 ? (
                 <></>
               ) : (
-                <BlogCard {...blog} variant="best" key={i} index={i} />
+                <BlogCard
+                  {...blog}
+                  variant="best"
+                  key={i}
+                  index={i}
+                  style={{ marginLeft: "15px" }}
+                />
               )
             return b
           })}

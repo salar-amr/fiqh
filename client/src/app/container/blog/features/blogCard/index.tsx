@@ -1,20 +1,48 @@
 import { Box, Icon, Typography, useTheme } from "@mui/material"
 import { Chat } from "react-iconly"
 import Link from "next/link"
+import { useEffect, useState } from "react"
 
-const BlogCard = ({
-  imgUrl,
-  tag,
-  author,
-  time,
-  comments,
-  title,
-  description,
-  variant,
-  style,
-  index,
-}: FakeDataBlogType) => {
+const BlogCard = ({ id, attributes, variant, index, style }: BlogCardType) => {
   const theme = useTheme()
+  const date = new Date(attributes?.publishedAt)
+  const [time, setTime] = useState("")
+
+  useEffect(() => {
+    let current = Date.now()
+    let msPerMinute = 60 * 1000
+    let msPerHour = msPerMinute * 60
+    let msPerDay = msPerHour * 24
+    let msPerMonth = msPerDay * 30
+    let msPerYear = msPerDay * 365
+
+    let elapsed = current - date.getTime()
+
+    if (elapsed < msPerMinute) {
+      if (elapsed / 1000 < 30) {
+        return "به تازگی"
+        setTime("به تازگی")
+      }
+      setTime(Math.round(elapsed / 1000) + " ثانیه پیش")
+      // return Math.round(elapsed / 1000) + " ثانیه پیش"
+    } else if (elapsed < msPerHour) {
+      setTime(Math.round(elapsed / msPerMinute) + " دقیقه پیش")
+      // return Math.round(elapsed / msPerMinute) + " دقیقه پیش"
+    } else if (elapsed < msPerDay) {
+      setTime(Math.round(elapsed / msPerHour) + " ساعت پیش")
+      // return Math.round(elapsed / msPerHour) + " ساعت پیش"
+    } else if (elapsed < msPerMonth) {
+      setTime(Math.round(elapsed / msPerDay) + " روز پیش")
+      // return Math.round(elapsed / msPerDay) + " روز پیش"
+    } else if (elapsed < msPerYear) {
+      setTime(Math.round(elapsed / msPerMonth) + " ماه پیش")
+      // return Math.round(elapsed / msPerMonth) + " ماه پیش"
+    } else {
+      setTime(Math.round(elapsed / msPerYear) + " سال پیش")
+      // return Math.round(elapsed / msPerYear) + " سال پیش"
+    }
+  }, [date])
+
   return (
     <Link href="/blog/single/[blogId]" as="/blog/single/blog">
       <Box
@@ -33,7 +61,10 @@ const BlogCard = ({
               ? "237px"
               : "100%",
           width: "100%",
-          alignItems: "center",
+          alignItems:
+            variant == "newest" || variant === "head" || variant === "popular"
+              ? null
+              : "center",
           borderBottom:
             index == 1 ||
             index == 2 ||
@@ -107,7 +138,7 @@ const BlogCard = ({
                 : "88px",
             marginBottom: "16px",
             borderRadius: "15px",
-            background: `url(${imgUrl}) center no-repeat`,
+            background: `url(${attributes?.image?.data?.attributes?.url}) center no-repeat`,
             backgroundSize: "cover",
             display: "flex",
             justifyContent: "end",
@@ -134,7 +165,9 @@ const BlogCard = ({
                 color: "#FFF",
               }}
             >
-              {tag}
+              {attributes?.blog_tags?.data?.length > 0
+                ? attributes?.blog_tags?.data[0]?.attributes?.title
+                : "tag"}
             </Typography>
           ) : null}
         </Box>
@@ -158,7 +191,9 @@ const BlogCard = ({
                 color: "#FFF",
               }}
             >
-              {tag}
+              {attributes?.blog_tags?.data?.length > 0
+                ? attributes?.blog_tags?.data[0]?.attributes?.title
+                : "tag"}
             </Typography>
           ) : null}
           <Box
@@ -184,7 +219,7 @@ const BlogCard = ({
                 fontWeight: 700,
               }}
             >
-              {author}
+              {attributes?.author?.data?.attributes?.fullName}
             </Typography>
             <Typography
               sx={{
@@ -214,7 +249,7 @@ const BlogCard = ({
                     fontSize: "14px",
                   }}
                 >
-                  ({comments.length})
+                  ({attributes?.commentCount})
                 </Typography>
                 <Icon
                   component={Chat}
@@ -236,7 +271,7 @@ const BlogCard = ({
               color: variant === "footer" ? "#FFF" : "gray.dark",
             }}
           >
-            {title}
+            {attributes?.title}
           </Typography>
           {variant == "head" ||
           variant === "best-head" ||
@@ -250,7 +285,7 @@ const BlogCard = ({
                 overflow: "hidden",
               }}
             >
-              {description}
+              {attributes?.description}
             </Typography>
           ) : null}
         </Box>

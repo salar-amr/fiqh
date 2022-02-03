@@ -1,11 +1,11 @@
 import BlogTitle from "@/components/blog/features/blogTitle"
 import { Box, Pagination, Typography, CircularProgress } from "@mui/material"
-import { useBlogSort } from "src/services"
+import { useBlogList } from "src/services"
 import BlogCard from "../blogCard"
-import data from "./archiveData.json"
+// import data from "./archiveData.json"
 
 const Archive = ({ variant }: any) => {
-  // const { data, isLoading } = useBlogSort("")
+  const { data, isLoading } = useBlogList()
   return (
     <Box
       sx={{
@@ -16,9 +16,12 @@ const Archive = ({ variant }: any) => {
     >
       {variant == "cat" ? null : <BlogTitle text="آرشیو مطالب" />}{" "}
       <Box sx={{ display: "felx", flexDirection: "column" }}>
-        {data?.map((blog, i) => (
-          <BlogCard {...blog} variant="archive" key={i} />
-        ))}
+        {data?.data?.map((blog, i) => {
+          const d =
+            i > 3 ? <></> : <BlogCard {...blog} variant="archive" key={i} />
+
+          return d
+        })}
       </Box>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Pagination count={5} color="primary" />

@@ -2,9 +2,39 @@ import { Box, IconButton, Typography, Button } from "@mui/material"
 import { Like1, Dislike } from "iconsax-react"
 import { useState } from "react"
 import SubComment from "./subComment"
+// @ts-ignore
+import qs from "qs"
 
-const Comment = () => {
+function timeDifference(current: any, previous: any) {
+  var msPerMinute = 60 * 1000
+  var msPerHour = msPerMinute * 60
+  var msPerDay = msPerHour * 24
+  var msPerMonth = msPerDay * 30
+  var msPerYear = msPerDay * 365
+
+  var elapsed = current - previous
+
+  if (elapsed < msPerMinute) {
+    if (elapsed / 1000 < 30) return "به تازگی"
+
+    return Math.round(elapsed / 1000) + " ثانیه پیش"
+  } else if (elapsed < msPerHour) {
+    return Math.round(elapsed / msPerMinute) + " دقیقه پیش"
+  } else if (elapsed < msPerDay) {
+    return Math.round(elapsed / msPerHour) + " ساعت پیش"
+  } else if (elapsed < msPerMonth) {
+    return Math.round(elapsed / msPerDay) + " روز پیش"
+  } else if (elapsed < msPerYear) {
+    return Math.round(elapsed / msPerMonth) + " ماه پیش"
+  } else {
+    return Math.round(elapsed / msPerYear) + " سال پیش"
+  }
+}
+
+const Comment = (props: any) => {
   const [vote, setVote] = useState("null")
+
+  const [subComs, setSubComs] = useState([])
 
   const likeHandler = () => {
     vote === "like" ? setVote("null") : setVote("like")
@@ -14,6 +44,29 @@ const Comment = () => {
   }
 
   const [showSubCommetns, setShowSubComments] = useState(false)
+
+  const qry = qs.stringify({
+    filters: {
+      comment: {
+        id: {
+          $eq: props.id,
+        },
+      },
+    },
+    populate: ["user.image"],
+  })
+
+  const showSubComments = async () => {
+    const dt = await fetch(
+      "https://fm3.berentco.ir/api/blog-comments" + `?${qry}`
+    )
+    const jdt = await dt.json()
+
+    if (jdt.data) {
+      setSubComs(jdt.data)
+      setShowSubComments(true)
+    } else return
+  }
 
   return (
     <Box
@@ -76,10 +129,11 @@ const Comment = () => {
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Typography sx={{ fontSize: "14px", color: "#444A51" }}>
-              2 ساعت پیش
+              {timeDifference(new Date(), new Date(props.attributes.createdAt))}
             </Typography>
             <Typography sx={{ fontWeight: 800, color: "gray.dark" }}>
-              محمد عزیزی
+              {props.attributes?.user.data?.attributes.username ||
+                props.attributes?.user.data?.attributes.username}
             </Typography>
           </Box>
           <Box
@@ -94,24 +148,26 @@ const Comment = () => {
         </Box>
       </Box>
       <Typography sx={{ m: "16px 0 16px 100px" }}>
-        سامسونگ به عنوان یکی از تامین‌کنندگان صفحات نمایش اپل در مراحل ابتدایی
-        آماده‌سازی خط تولید نمایشگر OLED قرار دارد که در مدل‌های آتی مک‌بوک پرو
-        به کار گرفته خواهد شد
+        {props.attributes.content}
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Typography>(2)</Typography>
+          <Typography>
+            ({props.attributes.blog_comments.data.length})
+          </Typography>
           <IconButton>
             <Typography>پاسخ</Typography>
           </IconButton>
         </Box>
-        <Button
-          variant="text"
-          sx={{ textDecorationLine: "underline" }}
-          onClick={() => setShowSubComments(true)}
-        >
-          نمایش پاسخ ها
-        </Button>
+        {props.attributes?.blog_comments.data.length ? (
+          <Button
+            variant="text"
+            sx={{ textDecorationLine: "underline" }}
+            onClick={showSubComments}
+          >
+            نمایش پاسخ ها
+          </Button>
+        ) : null}
       </Box>
       {/* answer ? */}
       {showSubCommetns ? (
@@ -126,8 +182,11 @@ const Comment = () => {
             border: "1px solid #D0D2D4",
           }}
         >
-          <SubComment />
-          <SubComment />
+          {/* <SubComment />
+          <SubComment /> */}
+          {subComs.map((itm: any) => {
+            return <SubComment {...itm} />
+          })}
         </Box>
       ) : null}
     </Box>

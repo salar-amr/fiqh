@@ -46,20 +46,20 @@ const ConfirmLogin = () => {
 
   const confirmHandler = (e: any) => {
     e.preventDefault()
-    router.push("/")
-    // mutate(
-    //   {
-    //     confirm: confirmCode,
-    //   },
-    //   {
-    //     onSuccess: (res: any) => {
-    //       Cookies.set("token", res?.jwt)
-    //     },
-    //     onError: () => {
-    //       setOpenSnackbar(true)
-    //     },
-    //   }
-    // )
+    mutate(
+      {
+        confirm: confirmCode,
+      },
+      {
+        onSuccess: (res: any) => {
+          Cookies.set("token", res?.jwt)
+          router.push("/")
+        },
+        onError: () => {
+          setOpenSnackbar(true)
+        },
+      }
+    )
   }
 
   const theme = useTheme()

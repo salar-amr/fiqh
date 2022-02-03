@@ -9,8 +9,8 @@ const SubMenuItems = () => {
 
   // console.log(router.pathname.split("/"))
 
-  // const { data } = useCategoryList()
-  // console.log(data)
+  const { data } = useCategoryList()
+  console.log("sub", data)
 
   const currentActiveItem = menuData.filter((item) => {
     // console.log(item)
@@ -37,10 +37,11 @@ const SubMenuItems = () => {
             },
           }}
         >
-          {currentActiveItem[0].subMenu?.map((sumMenuItem, i) => (
+          {/* {currentActiveItem[0].subMenu?.map((sumMenuItem, i) => ( */}
+          {data?.data?.map((sumMenuItem, i) => (
             <Link
               href="/blog/[category]"
-              as={`/blog/${sumMenuItem.text}`}
+              as={`/blog/${sumMenuItem?.id}`}
               key={i}
             >
               <Button
@@ -48,14 +49,14 @@ const SubMenuItems = () => {
                   marginLeft: "32px",
                   fontSize: "14px",
                   cursor: "pointer",
-                  // color: "#FFFFFFB2",
-                  color:
-                    router?.query?.category === sumMenuItem.text
-                      ? "#FFF"
-                      : "#FFFFFFB2",
+                  color: "#FFFFFFB2",
+                  // color:
+                  //   router?.query?.category === sumMenuItem.text
+                  //     ? "#FFF"
+                  //     : "#FFFFFFB2",
                 }}
               >
-                {sumMenuItem.text}
+                {sumMenuItem?.attributes?.title}
               </Button>
             </Link>
           ))}

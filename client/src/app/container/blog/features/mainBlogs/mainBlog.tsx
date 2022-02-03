@@ -1,25 +1,53 @@
 import { useTheme } from "@mui/material"
 import { Box, Icon, Typography } from "@mui/material"
+import { useEffect, useState } from "react"
 import { Chat } from "react-iconly"
 
-const MainBlog = ({
-  imgUrl,
-  tag,
-  author,
-  time,
-  comments,
-  title,
-  description,
-  variant,
-  style,
-}: FakeDataBlogType) => {
+const MainBlog = ({ id, attributes, variant, index, style }: BlogCardType) => {
   const theme = useTheme()
+  const date = new Date(attributes?.publishedAt)
+  const [time, setTime] = useState("")
+
+  useEffect(() => {
+    let current = Date.now()
+    let msPerMinute = 60 * 1000
+    let msPerHour = msPerMinute * 60
+    let msPerDay = msPerHour * 24
+    let msPerMonth = msPerDay * 30
+    let msPerYear = msPerDay * 365
+
+    let elapsed = current - date.getTime()
+
+    if (elapsed < msPerMinute) {
+      if (elapsed / 1000 < 30) {
+        return "به تازگی"
+        setTime("به تازگی")
+      }
+      setTime(Math.round(elapsed / 1000) + " ثانیه پیش")
+      // return Math.round(elapsed / 1000) + " ثانیه پیش"
+    } else if (elapsed < msPerHour) {
+      setTime(Math.round(elapsed / msPerMinute) + " دقیقه پیش")
+      // return Math.round(elapsed / msPerMinute) + " دقیقه پیش"
+    } else if (elapsed < msPerDay) {
+      setTime(Math.round(elapsed / msPerHour) + " ساعت پیش")
+      // return Math.round(elapsed / msPerHour) + " ساعت پیش"
+    } else if (elapsed < msPerMonth) {
+      setTime(Math.round(elapsed / msPerDay) + " روز پیش")
+      // return Math.round(elapsed / msPerDay) + " روز پیش"
+    } else if (elapsed < msPerYear) {
+      setTime(Math.round(elapsed / msPerMonth) + " ماه پیش")
+      // return Math.round(elapsed / msPerMonth) + " ماه پیش"
+    } else {
+      setTime(Math.round(elapsed / msPerYear) + " سال پیش")
+      // return Math.round(elapsed / msPerYear) + " سال پیش"
+    }
+  }, [date])
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        background: `linear-gradient(359.76deg, #130F26 0.23%, rgba(19, 15, 38, 0) 115.53%),url(${imgUrl}) center no-repeat`,
+        background: `linear-gradient(359.76deg, #130F26 0.23%, rgba(19, 15, 38, 0) 115.53%),url(${attributes?.image?.data?.attributes?.url}) center no-repeat`,
         backgroundSize: "cover",
         height: variant != "sm" ? "440px" : "218px",
         width: variant == "xl" ? "100%" : variant == "lg" ? "640px" : "317px",
@@ -51,7 +79,9 @@ const MainBlog = ({
           color: "#FFF",
         }}
       >
-        {tag}
+        {attributes?.blog_tags?.data?.length > 0
+          ? attributes?.blog_tags?.data[0]?.attributes?.title
+          : "tag"}
       </Typography>
       <Box
         sx={{
@@ -69,7 +99,7 @@ const MainBlog = ({
             fontWeight: 700,
           }}
         >
-          {author}
+          {attributes?.author?.data?.attributes?.fullName}
         </Typography>
         <Typography
           sx={{
@@ -89,7 +119,7 @@ const MainBlog = ({
               fontSize: "14px",
             }}
           >
-            ({comments.length})
+            ({attributes?.commentCount})
           </Typography>
           <Icon
             component={Chat}
@@ -108,7 +138,7 @@ const MainBlog = ({
           color: "#FFF",
         }}
       >
-        {title}
+        {attributes?.title}
       </Typography>
       {variant == "lg" || variant === "xl" || variant === "head" ? (
         <Typography
@@ -125,7 +155,7 @@ const MainBlog = ({
             [theme.breakpoints.down("md")]: { display: "none" },
           }}
         >
-          {description}
+          {attributes?.description}
         </Typography>
       ) : null}
     </Box>

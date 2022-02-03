@@ -1,17 +1,51 @@
 import { Box, Icon, Typography } from "@mui/material"
+import { useEffect, useState } from "react"
 import { Chat } from "react-iconly"
 
 const BlogCardV2 = ({
-  imgUrl,
-  tag,
-  author,
-  time,
-  comments,
-  title,
-  description,
+  id,
+  attributes,
   variant,
+  index,
   style,
-}: FakeDataBlogType) => {
+}: BlogCardType) => {
+  const date = new Date(attributes?.publishedAt)
+  const [time, setTime] = useState("")
+
+  useEffect(() => {
+    let current = Date.now()
+    let msPerMinute = 60 * 1000
+    let msPerHour = msPerMinute * 60
+    let msPerDay = msPerHour * 24
+    let msPerMonth = msPerDay * 30
+    let msPerYear = msPerDay * 365
+
+    let elapsed = current - date.getTime()
+
+    if (elapsed < msPerMinute) {
+      if (elapsed / 1000 < 30) {
+        return "به تازگی"
+        setTime("به تازگی")
+      }
+      setTime(Math.round(elapsed / 1000) + " ثانیه پیش")
+      // return Math.round(elapsed / 1000) + " ثانیه پیش"
+    } else if (elapsed < msPerHour) {
+      setTime(Math.round(elapsed / msPerMinute) + " دقیقه پیش")
+      // return Math.round(elapsed / msPerMinute) + " دقیقه پیش"
+    } else if (elapsed < msPerDay) {
+      setTime(Math.round(elapsed / msPerHour) + " ساعت پیش")
+      // return Math.round(elapsed / msPerHour) + " ساعت پیش"
+    } else if (elapsed < msPerMonth) {
+      setTime(Math.round(elapsed / msPerDay) + " روز پیش")
+      // return Math.round(elapsed / msPerDay) + " روز پیش"
+    } else if (elapsed < msPerYear) {
+      setTime(Math.round(elapsed / msPerMonth) + " ماه پیش")
+      // return Math.round(elapsed / msPerMonth) + " ماه پیش"
+    } else {
+      setTime(Math.round(elapsed / msPerYear) + " سال پیش")
+      // return Math.round(elapsed / msPerYear) + " سال پیش"
+    }
+  }, [date])
   return (
     <Box
       sx={{
@@ -41,7 +75,9 @@ const BlogCardV2 = ({
           color: variant === "footer" ? "#FFF" : "gray.dark",
         }}
       >
-        {tag}
+        {attributes?.blog_tags?.data?.length > 0
+          ? attributes?.blog_tags?.data[0]?.attributes?.title
+          : "tag"}
       </Typography>
       <Typography
         sx={{
@@ -53,7 +89,7 @@ const BlogCardV2 = ({
           color: variant === "footer" ? "#FFF" : "gray.dark",
         }}
       >
-        {title}
+        {attributes?.title}
       </Typography>
       <Box
         sx={{
@@ -71,7 +107,7 @@ const BlogCardV2 = ({
             fontWeight: 700,
           }}
         >
-          {author}
+          {attributes?.author?.data?.attributes?.fullName}
         </Typography>
         <Typography
           sx={{
@@ -91,7 +127,7 @@ const BlogCardV2 = ({
               fontSize: "14px",
             }}
           >
-            ({comments.length})
+            ({attributes?.commentCount})
           </Typography>
           <Icon
             component={Chat}

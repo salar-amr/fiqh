@@ -3,10 +3,10 @@ import { Box, CircularProgress, Divider, Icon, useTheme } from "@mui/material"
 import { ChevronLeftCircle, ChevronRightCircle } from "react-iconly"
 import { useBlogSort } from "src/services"
 import BlogCard from "../blogCard"
-import { newestData } from "./newestData"
+// import { newestData } from "./newestData"
 
 const NewestBlogs = () => {
-  // const { data, isLoading } = useBlogSort("")
+  const { data, isLoading } = useBlogSort("publishedAt%3Adesc")
 
   const theme = useTheme()
 
@@ -42,16 +42,22 @@ const NewestBlogs = () => {
           },
         }}
       >
-        {newestData.map((blog) => (
-          <BlogCard
-            {...blog}
-            variant="newest"
-            style={{
-              marginLeft: "16px",
-              "&:last-child": { marginLeft: "0" },
-            }}
-          />
-        ))}
+        {data?.data?.map((blog, i) => {
+          const d =
+            i > 2 ? (
+              <></>
+            ) : (
+              <BlogCard
+                {...blog}
+                variant="newest"
+                style={{
+                  marginLeft: "16px",
+                  "&:last-child": { marginLeft: "0" },
+                }}
+              />
+            )
+          return d
+        })}
       </Box>
     </Box>
   )

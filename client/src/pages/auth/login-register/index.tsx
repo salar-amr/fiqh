@@ -22,39 +22,39 @@ const Login = () => {
 
   const loginHandler = () => {
     // Cookies.remove("phone", email)
-    Cookies.set("email", email)
-    Cookies.set("phone", phone)
-    router.push("login-register/confirm")
-    // !isEmail
-    //   ? mutateEmail(
-    //       {
-    //         email: email,
-    //       },
-    //       {
-    //         onSuccess: () => {
-    //           // router.push("login-register/confirm")
-    //         },
-    //         onError: (err: any) => {
-    //           setMessage(err?.response?.error?.message)
-    //           setOpenSnackbar(true)
-    //         },
-    //       }
-    //     )
-    //   : mutatePhone(
-    //       {
-    //         phone: "+" + phone,
-    //       },
-    //       {
-    //         onSuccess: () => {
-    //           router.push("login-register/confirm")
-    //           Cookies.set("phone", phone)
-    //         },
-    //         onError: (err: any) => {
-    //           setMessage(err?.response?.error?.message)
-    //           setOpenSnackbar(true)
-    //         },
-    //       }
-    //     )
+    // Cookies.set("email", email)
+    // Cookies.set("phone", phone)
+    // router.push("login-register/confirm")
+    !isEmail
+      ? mutateEmail(
+          {
+            email: email,
+          },
+          {
+            onSuccess: () => {
+              // router.push("login-register/confirm")
+            },
+            onError: (err: any) => {
+              setMessage(err?.response?.error?.message)
+              setOpenSnackbar(true)
+            },
+          }
+        )
+      : mutatePhone(
+          {
+            phone: "+" + phone,
+          },
+          {
+            onSuccess: () => {
+              router.push("login-register/confirm")
+              Cookies.set("phone", phone)
+            },
+            onError: (err: any) => {
+              setMessage(err?.response?.error?.message)
+              setOpenSnackbar(true)
+            },
+          }
+        )
   }
 
   // const loginGoogleHandler = () => {
@@ -212,7 +212,7 @@ const Login = () => {
               src="/assets/images/email.png"
             />
           </Button>
-          <Link href="http://localhost:1337/api/connect/google">
+          <Link href="https://fm3.berentco.ir/api/connect/google">
             <Button
               color="white"
               sx={{
